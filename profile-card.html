@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFT GIRLS — Gallery</title>
+    <meta name="description" content="GIFT GIRLS - Official Gallery">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gradient-bg: linear-gradient(135deg, #ff6b6b 0%, #ff8ba0 25%, #d84d6f 50%, #c7a3d8 75%, #9b7cb8 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-color: #ffffff;
+            --accent-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-bg);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        header {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            font-weight: 700;
+            opacity: 0.9;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Стиль карточки (Liquid Glass) */
+        .girl-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .girl-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .girl-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .girl-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .girl-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Стили для поиска */
+        .search-container {
+            margin-bottom: 50px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+
+        #profileSearch {
+            width: 100%;
+            padding: 16px 28px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #profileSearch::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            transition: opacity 0.3s ease;
+        }
+
+        #profileSearch:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        #profileSearch:focus::placeholder {
+            opacity: 0.3;
+        }
+
+        .participant-count {
+            margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 2.2rem;
+                letter-spacing: 6px;
+                margin-bottom: 10px;
+            }
+
+            .search-container {
+                margin-bottom: 30px;
+                padding: 0 10px;
+            }
+
+            #profileSearch {
+                padding: 14px 20px;
+                font-size: 1rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 15px;
+            }
+
+            .girl-name {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Gift Girls</h1>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="profileSearch" placeholder="Найти профиль..." autocomplete="off">
+        <div id="counter" class="participant-count">Участников: 0</div>
+    </div>
+
+    <main class="gallery-grid" id="gallery">
+        <!-- Shamuratov -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/shamuratov.png" alt="shamuratov">
+            </div>
+            <h2 class="girl-name">shamuratov</h2>
+        </article>
+        <!-- Ikar -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/ikar.png" alt="ikar">
+            </div>
+            <h2 class="girl-name">𒆜ɨ. ӄ. ǟ. ʀ. 𒆜</h2>
+        </article>
+        <!-- Snek -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/snek.png" alt="снек">
+            </div>
+            <h2 class="girl-name">снек</h2>
+        </article>
+        <!-- 2D -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/2d.png" alt="2D">
+            </div>
+            <h2 class="girl-name">2D</h2>
+        </article>
+        <!-- Evelka -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/evelka.png" alt="Evelka">
+            </div>
+            <h2 class="girl-name">Evelka</h2>
+        </article>
+        <!-- Sonya -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/sonya.png" alt="sonya">
+            </div>
+            <h2 class="girl-name">sonya</h2>
+        </article>
+        <!-- Yulkk -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/yulkk.png" alt="yulkk">
+            </div>
+            <h2 class="girl-name">yulkk</h2>
+        </article>
+        <!-- Hoshiko -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/hoshiko.png" alt="hoshiko">
+            </div>
+            <h2 class="girl-name">hoshiko</h2>
+        </article>
+        <!-- Ksyusha -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/ksyusha.png" alt="Ксюша">
+            </div>
+            <h2 class="girl-name">Ксюша</h2>
+        </article>
+        <!-- Uainni -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/uainni.png" alt="uainni">
+            </div>
+            <h2 class="girl-name">uainni</h2>
+        </article>
+        <!-- unlucky -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/unlucky.png" alt="unlucky">
+            </div>
+            <h2 class="girl-name">unlucky</h2>
+        </article>
+        <!-- lina -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/lina.png" alt="lina">
+            </div>
+            <h2 class="girl-name">lina</h2>
+        </article>
+        <!-- Valeriia -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/valeriia.png" alt="Valeriia">
+            </div>
+            <h2 class="girl-name">Valeriia</h2>
+        </article>
+        <!-- Настюша -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/nastyusha.png" alt="Настюша">
+            </div>
+            <h2 class="girl-name">Настюша</h2>
+        </article>
+        <!-- ansty -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/ansty.png" alt="ansty">
+            </div>
+            <h2 class="girl-name">ansty</h2>
+        </article>
+        <!-- stepashha -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/stepashha.png" alt="stepashha">
+            </div>
+            <h2 class="girl-name">stepashha</h2>
+        </article>
+        <!-- chrwcn -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/chrwcn.jpg" alt="chrwcn">
+            </div>
+            <h2 class="girl-name">chrwcn</h2>
+        </article>
+        <!-- Dana -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/dana.png" alt="Dana">
+            </div>
+            <h2 class="girl-name">Dana</h2>
+        </article>
+        <!-- waiting -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/waiting.png" alt="waiting">
+            </div>
+            <h2 class="girl-name">waiting</h2>
+        </article>
+        <!-- Sarra -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/sarra.png" alt="Sarra">
+            </div>
+            <h2 class="girl-name">Sarra</h2>
+        </article>
+        <!-- Sophie -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/sophie.png" alt="Sophie">
+            </div>
+            <h2 class="girl-name">sophie</h2>
+        </article>
+        <!-- Лерочка -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/lerochka.png" alt="Лерочка">
+            </div>
+            <h2 class="girl-name">Лерочка</h2>
+        </article>
+        <!-- NagaSerena -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/nagaserena.png" alt="NagaSerena">
+            </div>
+            <h2 class="girl-name">NagaSerena</h2>
+        </article>
+        <!-- Ellenachka -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/ellenachka.png" alt="Ellenachka">
+            </div>
+            <h2 class="girl-name">Ellenachka</h2>
+        </article>
+        <!-- madiii -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/madiii.png" alt="𝐦𝐚𝐝𝐢𝐢𝐢">
+            </div>
+            <h2 class="girl-name">𝐦𝐚𝐝𝐢𝐢𝐢</h2>
+        </article>
+        <!-- Minn -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/minn.png" alt="Minn">
+            </div>
+            <h2 class="girl-name">Minn</h2>
+        </article>
+        <!-- веля -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/velya.png" alt="веля">
+            </div>
+            <h2 class="girl-name">веля</h2>
+        </article>
+        <!-- simpatía ausente -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/simpatia.png" alt="simpatía ausente">
+            </div>
+            <h2 class="girl-name">simpatía ausente</h2>
+        </article>
+        <!-- latency -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/latency.png" alt="latency">
+            </div>
+            <h2 class="girl-name">latency</h2>
+        </article>
+        <!-- ʀᴏɴɪɴ -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/ronin.png" alt="ʀᴏɴɪɴ">
+            </div>
+            <h2 class="girl-name">ʀᴏɴɪɴ</h2>
+        </article>
+        <!-- Анастасия Литвин -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/anastasia.jpg" alt="Анастасия Литвин">
+            </div>
+            <h2 class="girl-name">Анастасия Литвин</h2>
+        </article>
+        <!-- mua -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/mua.png" alt="mua">
+            </div>
+            <h2 class="girl-name">mua</h2>
+        </article>
+        <!-- marlboro -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/marlboro.png" alt="marlboro">
+            </div>
+            <h2 class="girl-name">marlboro</h2>
+        </article>
+        <!-- Hostyan! -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/hostyan.png" alt="Hostyan!">
+            </div>
+            <h2 class="girl-name">Hostyan!</h2>
+        </article>
+        <!-- Армен -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/armen.png" alt="Армен">
+            </div>
+            <h2 class="girl-name">Армен</h2>
+        </article>
+        <!-- anora -->
+        <article class="girl-card">
+            <div class="image-container">
+                <img src="img/anora.png" alt="anora">
+            </div>
+            <h2 class="girl-name">anora</h2>
+        </article>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById('profileSearch');
+        const counterElement = document.getElementById('counter');
+        const cards = document.querySelectorAll('.girl-card');
+
+        function updateCounter() {
+            const visibleCards = Array.from(cards).filter(card => card.style.display !== 'none').length;
+            const totalCards = cards.length;
+
+            if (searchInput.value.trim() !== '') {
+                counterElement.textContent = `Найдено: ${visibleCards} из ${totalCards}`;
+            } else {
+                counterElement.textContent = `Всего участников: ${totalCards}`;
+            }
+        }
+
+        searchInput.addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+
+            cards.forEach(card => {
+                const name = card.querySelector('.girl-name').textContent.toLowerCase();
+                if (name.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0) scale(1)';
+                    }, 0);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(10px) scale(0.95)';
+                    setTimeout(() => {
+                        if (card.style.opacity === '0') {
+                            card.style.display = 'none';
+                            updateCounter();
+                        }
+                    }, 300);
+                }
+            });
+
+            // Если поиск пустой, обновляем сразу
+            if (searchTerm === '') {
+                updateCounter();
+            }
+        });
+
+        // Начальная установка счетчика
+        updateCounter();
+    </script>
+
+</body>
+
+</html>
