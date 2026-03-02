@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TON APR Калькулятор — Расчёт дохода</title>
+    <meta name="description"
+        content="Калькулятор доходности TON стейкинга. Рассчитайте заработок за секунду, неделю, месяц, сезон и год с конвертацией в USD и UZS." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- Animated BG -->
+    <div class="bg-wrap" aria-hidden="true">
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+        <div class="orb orb-c"></div>
+        <div class="grid-lines"></div>
+    </div>
+
+    <div class="shell">
+
+        <!-- ── HEADER ── -->
+        <header class="header">
+            <div class="brand">
+                <div class="brand-gem">
+                    <!-- TON diamond icon -->
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <polygon points="16,2 28,10 28,22 16,30 4,22 4,10" fill="url(#tonGrad)" opacity="0.9" />
+                        <polygon points="16,2 28,10 16,16" fill="rgba(255,255,255,0.25)" />
+                        <polygon points="16,16 28,10 28,22" fill="rgba(255,255,255,0.1)" />
+                        <polygon points="16,16 28,22 16,30" fill="rgba(255,255,255,0.15)" />
+                        <polygon points="4,10 16,16 16,2" fill="rgba(255,255,255,0.2)" />
+                        <defs>
+                            <linearGradient id="tonGrad" x1="4" y1="2" x2="28" y2="30" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#4a9eff" />
+                                <stop offset="100%" stop-color="#0088cc" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">TON</span><span class="brand-sub">APR</span>
+                </div>
+            </div>
+
+            <!-- Live price ticker -->
+            <div class="price-ticker" id="price-ticker">
+                <div class="ticker-item">
+                    <span class="ticker-label">TON/USD</span>
+                    <span class="ticker-val" id="price-usd">—</span>
+                </div>
+                <div class="ticker-sep"></div>
+                <div class="ticker-item">
+                    <span class="ticker-label">TON/RUB</span>
+                    <span class="ticker-val" id="price-rub">—</span>
+                </div>
+                <div class="ticker-sep"></div>
+                <div class="ticker-item">
+                    <span class="ticker-label">TON/UZS</span>
+                    <span class="ticker-val" id="price-uzs">—</span>
+                </div>
+                <div class="ticker-sep"></div>
+                <div class="ticker-status" id="ticker-status">
+                    <span class="status-dot pulsing" id="status-dot"></span>
+                    <span id="status-text">Загрузка...</span>
+                </div>
+                <button class="refresh-btn" id="refresh-btn" title="Обновить курс">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- ── HERO TITLE ── -->
+        <section class="hero">
+            <h1 class="hero-title">
+                Сколько вы<br />заработаете на <span class="ton-glow">TON</span>?
+            </h1>
+            <p class="hero-sub">Введите сумму и процентную ставку — увидите доход в TON, USD, RUB и UZS</p>
+        </section>
+
+        <!-- ── MAIN CONTENT ── -->
+        <div class="content-grid">
+
+            <!-- LEFT: INPUTS -->
+            <div class="inputs-col">
+
+                <!-- Amount Input -->
+                <div class="input-block" id="block-amount">
+                    <label class="iblock-label">Сумма вложения</label>
+                    <div class="amount-input-wrap">
+                        <div class="currency-badge">
+                            <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+                                <polygon points="16,2 28,10 16,16" fill="rgba(255,255,255,0.3)" />
+                                <polygon points="16,16 28,10 28,22" fill="rgba(255,255,255,0.15)" />
+                                <polygon points="16,16 28,22 16,30" fill="rgba(255,255,255,0.2)" />
+                                <polygon points="4,10 16,16 16,2" fill="rgba(255,255,255,0.25)" />
+                                <polygon points="4,10 16,16 4,22" fill="rgba(255,255,255,0.1)" />
+                                <polygon points="4,22 16,16 16,30" fill="rgba(255,255,255,0.18)" />
+                                <polygon points="16,2 28,10 28,22 16,30 4,22 4,10" stroke="rgba(255,255,255,0.5)"
+                                    stroke-width="1" fill="none" />
+                            </svg>
+                            TON
+                        </div>
+                        <input type="number" id="inp-amount" class="amount-input" value="500" min="0.01" step="any"
+                            placeholder="500" autocomplete="off" />
+                    </div>
+                    <div class="hint-row">
+                        <span id="amount-usd-hint">≈ — USD</span>
+                        <span class="hint-sep">·</span>
+                        <span id="amount-rub-hint">≈ — ₽</span>
+                    </div>
+                    <input type="range" class="slider" id="slider-amount" min="1" max="100000" step="1" value="500" />
+                    <div class="slider-marks">
+                        <span>1</span><span>10K</span><span>50K</span><span>100K TON</span>
+                    </div>
+                </div>
+
+                <!-- APR Input -->
+                <div class="input-block" id="block-apr">
+                    <label class="iblock-label">Процентная ставка (APR)</label>
+                    <div class="apr-input-wrap">
+                        <input type="number" id="inp-apr" class="apr-input" value="12" min="0.01" max="999" step="0.01"
+                            placeholder="12" autocomplete="off" />
+                        <div class="apr-suffix">% / год</div>
+                    </div>
+                    <input type="range" class="slider" id="slider-apr" min="0.1" max="200" step="0.1" value="12" />
+                    <div class="slider-marks">
+                        <span>0.1%</span><span>50%</span><span>100%</span><span>200%</span>
+                    </div>
+                    <!-- Quick presets -->
+                    <div class="presets">
+                        <span class="preset-label">Быстрый выбор:</span>
+                        <button class="preset-btn" data-apr="4.5" id="preset-45">4.5%</button>
+                        <button class="preset-btn" data-apr="7" id="preset-7">7%</button>
+                        <button class="preset-btn" data-apr="12" id="preset-12">12%</button>
+                        <button class="preset-btn" data-apr="20" id="preset-20">20%</button>
+                        <button class="preset-btn" data-apr="50" id="preset-50">50%</button>
+                    </div>
+                </div>
+
+                <!-- Compound toggle -->
+                <div class="compound-block">
+                    <div class="compound-info">
+                        <span class="compound-title">Сложный процент</span>
+                        <span class="compound-desc">Реинвестировать доход ежемесячно</span>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="compound-toggle" checked />
+                        <span class="toggle-track">
+                            <span class="toggle-thumb"></span>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Equivalent block -->
+                <div class="equiv-block" id="equiv-block">
+                    <div class="equiv-row">
+                        <div class="equiv-icon">💰</div>
+                        <div class="equiv-info">
+                            <span class="equiv-label">Стоимость вложения</span>
+                            <div class="equiv-values">
+                                <span id="eq-usd">— USD</span>
+                                <span class="eq-sep">·</span>
+                                <span id="eq-rub">— ₽</span>
+                                <span class="eq-sep">·</span>
+                                <span id="eq-uzs">— UZS</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT: RESULTS -->
+            <div class="results-col">
+
+                <!-- Big APR Display -->
+                <div class="apr-hero-card">
+                    <div class="apr-hero-left">
+                        <div class="apr-hero-label">Ставка APR</div>
+                        <div class="apr-hero-val" id="apr-hero-val">12%</div>
+                        <div class="apr-hero-sub">ежегодная доходность</div>
+                    </div>
+                    <div class="apr-ring-wrap">
+                        <svg class="apr-ring" viewBox="0 0 120 120" id="apr-ring-svg">
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(74,158,255,0.1)"
+                                stroke-width="10" />
+                            <circle cx="60" cy="60" r="52" fill="none" stroke="url(#ringGrad)" stroke-width="10"
+                                stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327"
+                                transform="rotate(-90 60 60)" id="ring-fill" />
+                            <defs>
+                                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#4a9eff" />
+                                    <stop offset="100%" stop-color="#00d4ff" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="ring-center-text">
+                            <div class="ring-daily" id="ring-daily">—</div>
+                            <div class="ring-daily-label">TON/день</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings Grid -->
+                <div class="earnings-grid">
+
+                    <div class="earn-card" id="earn-second">
+                        <div class="earn-icon">⚡</div>
+                        <div class="earn-period">За секунду</div>
+                        <div class="earn-ton" id="es-ton">—</div>
+                        <div class="earn-fiat">
+                            <span id="es-usd">— USD</span>
+                            <span id="es-rub">— ₽</span>
+                            <span id="es-uzs">— UZS</span>
+                        </div>
+                    </div>
+
+                    <div class="earn-card" id="earn-week">
+                        <div class="earn-icon">📅</div>
+                        <div class="earn-period">За неделю</div>
+                        <div class="earn-ton" id="ew-ton">—</div>
+                        <div class="earn-fiat">
+                            <span id="ew-usd">— USD</span>
+                            <span id="ew-rub">— ₽</span>
+                            <span id="ew-uzs">— UZS</span>
+                        </div>
+                    </div>
+
+                    <div class="earn-card highlighted" id="earn-month">
+                        <div class="earn-badge">популярный</div>
+                        <div class="earn-icon">🗓️</div>
+                        <div class="earn-period">За месяц</div>
+                        <div class="earn-ton" id="em-ton">—</div>
+                        <div class="earn-fiat">
+                            <span id="em-usd">— USD</span>
+                            <span id="em-rub">— ₽</span>
+                            <span id="em-uzs">— UZS</span>
+                        </div>
+                    </div>
+
+                    <div class="earn-card" id="earn-season">
+                        <div class="earn-icon">🍂</div>
+                        <div class="earn-period">За сезон (3 мес)</div>
+                        <div class="earn-ton" id="ess-ton">—</div>
+                        <div class="earn-fiat">
+                            <span id="ess-usd">— USD</span>
+                            <span id="ess-rub">— ₽</span>
+                            <span id="ess-uzs">— UZS</span>
+                        </div>
+                    </div>
+
+                    <div class="earn-card earn-year" id="earn-year">
+                        <div class="earn-icon">🏆</div>
+                        <div class="earn-period">За год</div>
+                        <div class="earn-ton" id="ey-ton">—</div>
+                        <div class="earn-fiat">
+                            <span id="ey-usd">— USD</span>
+                            <span id="ey-rub">— ₽</span>
+                            <span id="ey-uzs">— UZS</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Growth bar -->
+                <div class="growth-card">
+                    <div class="growth-header">
+                        <span class="growth-title">Итог через год</span>
+                        <span class="growth-formula" id="growth-formula">— TON → — TON</span>
+                    </div>
+                    <div class="growth-bar-wrap">
+                        <div class="growth-bar-track">
+                            <div class="growth-bar-principal" id="gb-principal"></div>
+                            <div class="growth-bar-profit" id="gb-profit"></div>
+                        </div>
+                        <div class="growth-legend">
+                            <div class="gl-item"><span class="gl-dot dot-principal"></span>Вложено</div>
+                            <div class="gl-item"><span class="gl-dot dot-profit"></span>Доход</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payback Card -->
+                <div class="payback-card" id="payback-card">
+                    <div class="payback-icon">⏳</div>
+                    <div class="payback-body">
+                        <div class="payback-label">Срок окупаемости вложения</div>
+                        <div class="payback-value" id="payback-value">—</div>
+                        <div class="payback-sub" id="payback-sub">вернёте вложенную сумму доходом</div>
+                    </div>
+                    <div class="payback-progress">
+                        <svg viewBox="0 0 200 6" class="payback-svg">
+                            <rect x="0" y="0" width="200" height="6" rx="3" fill="rgba(74,158,255,0.1)" />
+                            <rect id="payback-bar" x="0" y="0" width="0" height="6" rx="3" fill="url(#pbGrad)" />
+                            <defs>
+                                <linearGradient id="pbGrad" x1="0" y1="0" x2="200" y2="0"
+                                    gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#4a9eff" />
+                                    <stop offset="100%" stop-color="#00d4ff" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="payback-dots">
+                            <span>Сейчас</span>
+                            <span id="payback-end-label"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+
+            <p>Курс обновляется в реальном времени · Расчёты носят информационный характер</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
